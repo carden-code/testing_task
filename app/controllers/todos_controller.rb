@@ -1,20 +1,20 @@
 class TodosController < ApplicationController
   def create
-    @todo = find_project(params[:project_id]).todos.new(todo_params)
+    todo = find_project(params[:project_id]).todos.new(todo_params)
     if todo.save
-      @todo = find_todo(todo.id)
-      render json: @todo, status: 201
+      todo = find_todo(todo.id)
+      render json: todo, status: 201
     else
-      render json: { errors: @todo.errors }, status: :unprocessable_entity
+      render json: { errors: todo.errors }, status: :unprocessable_entity
     end
   end
 
   def update
-    @todo = Todo.find(params[:id])
-    if @todo.update_attributes(todo_params)
+    todo = Todo.find(params[:id])
+    if todo.update_attributes(todo_params)
       redirect_to projects_path
     else
-      render json: { errors: @todo.errors }, status: :unprocessable_entity
+      render json: { errors: todo.errors }, status: :unprocessable_entity
     end
   end
 
