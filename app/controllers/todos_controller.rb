@@ -3,7 +3,7 @@ class TodosController < ApplicationController
 
   def create
     project = find_project(params[:project_id])
-    todo = project.todos.new(todo_params_new)
+    todo = project.todos.new(todo_params)
 
     if todo.save
       redirect_to root_path, status: 201
@@ -28,11 +28,7 @@ class TodosController < ApplicationController
     params.permit(:title)
   end
 
-  def todo_params_compliited
-    params.permit(:id, :complited)
-  end
-
-  def todo_params_new
+  def todo_params
     params.permit(:text, :complited, :project_id)
   end
 
