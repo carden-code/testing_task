@@ -1,14 +1,12 @@
 class TodosController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def create
-    if find_project(params[:project_id]).id.present?
-      todo = find_project(params[:project_id]).todos.new(todo_new_params)
-    else
-      project = Project.new(project_params)
-      todo = project.todos.new(todo_new_params)
-    end
+    project = find_project(params[:project_id])
+    todo = project.todos.new(todo_params_new)
 
     if todo.save
-      render 'projects/index', status: 201
+      redirect_to root_path, status: 201
     else
       render json: { errors: todo.errors }, status: :unprocessable_entity
     end
@@ -17,8 +15,8 @@ class TodosController < ApplicationController
   def update
     todo = Todo.find(params[:id])
 
-    if todo.update(todo_params)
-      render 'projects/index', status: :ok
+    if todo.update(todo_params_compliited)
+      redirect_to root_path, status: :ok
     else
       render json: { errors: todo.errors }, status: :unprocessable_entity
     end
@@ -27,22 +25,18 @@ class TodosController < ApplicationController
   private
 
   def project_params
-    params.require(:project_id).permit(:title)
+    params.permit(:title)
   end
 
-  def todo_new_params
-    params.require(:todo).permit(:text, :complited)
+  def todo_params_compliited
+    params.permit(:id, :complited)
   end
 
-  def todo_params
-    params.require(:todo).permit(:complited)
+  def todo_params_new
+    params.permit(:text, :complited, :project_id)
   end
 
   def find_project(project_id)
     Project.find(project_id)
-  end
-
-  def find_todo(id)
-    Todo.select(:id, :text).where(id: id)
   end
 end
