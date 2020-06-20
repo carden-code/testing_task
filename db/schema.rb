@@ -16,13 +16,13 @@ ActiveRecord::Schema.define(version: 2020_06_18_220611) do
   enable_extension "plpgsql"
 
   create_table "projects", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "todos", force: :cascade do |t|
-    t.string "text"
+    t.string "text", null: false
     t.boolean "complited", default: false
     t.bigint "project_id"
     t.datetime "created_at", precision: 6, null: false
