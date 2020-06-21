@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
+  # Возможно в будущем добавить пагинации.
   def index
-    render json: { message: "ok" }
+    @projects = Project.all
   end
 end
